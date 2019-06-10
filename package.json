@@ -1,0 +1,15 @@
+{
+  "name": "create-spider-engine-app",
+  "version": "1.0.0",
+  "description": "Creates a minimal Spider Engine project.",
+  "bin": {
+    "create-spider-engine-app": "./create-spider-engine-app.js"
+  },
+  "author": "Amine Rehioui",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.20.0",
+    "jszip": "^3.2.1",
+    "request": "^2.88.0"
+  }
+}
