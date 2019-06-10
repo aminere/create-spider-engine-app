@@ -2,6 +2,7 @@
   "name": "create-spider-engine-app",
   "version": "1.0.0",
   "description": "Creates a minimal Spider Engine project.",
+  "repository": "aminere/create-spider-engine-app",
   "bin": {
     "create-spider-engine-app": "./create-spider-engine-app.js"
   },
