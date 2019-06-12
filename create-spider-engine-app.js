@@ -20,8 +20,7 @@ program
 program.parse(process.argv);
 
 const exists = (dir) => new Promise((resolve, reject) => {
-  fs.access(dir, fs.constants.F_OK, (err) => {
-    // console.log(`${dir} exists: ${!Boolean(err)}`);
+  fs.access(dir, fs.constants.F_OK, (err) => {    
     resolve(!Boolean(err));
   });
 });
@@ -36,8 +35,7 @@ const isEmpty = (dir) => new Promise((resolve, reject) => {
   })
 });
 
-const writeFile = (path, data) => new Promise((resolve, reject) => {
-  console.log(`writeFile ${path}`);
+const writeFile = (path, data) => new Promise((resolve, reject) => {  
   fs.writeFile(path, data, (err) => {
     if (err) {
       reject(err);
@@ -47,8 +45,7 @@ const writeFile = (path, data) => new Promise((resolve, reject) => {
   });
 });
 
-const mkDir = (dir) => new Promise((resolve, reject) => {
-  console.log(`mkDir ${dir}`);
+const mkDir = (dir) => new Promise((resolve, reject) => {  
   fs.mkdir(dir, { recursive: true }, err => {
     if (err) {
       reject(`Cannot create directory '${dir}'`);
