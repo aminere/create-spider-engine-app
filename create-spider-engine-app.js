@@ -21,6 +21,7 @@ program.parse(process.argv);
 
 const exists = (dir) => new Promise((resolve, reject) => {
   fs.access(dir, fs.constants.F_OK, (err) => {
+    // console.log(`${dir} exists: ${!Boolean(err)}`);
     resolve(!Boolean(err));
   });
 });
@@ -36,6 +37,7 @@ const isEmpty = (dir) => new Promise((resolve, reject) => {
 });
 
 const writeFile = (path, data) => new Promise((resolve, reject) => {
+  console.log(`writeFile ${path}`);
   fs.writeFile(path, data, (err) => {
     if (err) {
       reject(err);
@@ -46,6 +48,7 @@ const writeFile = (path, data) => new Promise((resolve, reject) => {
 });
 
 const mkDir = (dir) => new Promise((resolve, reject) => {
+  console.log(`mkDir ${dir}`);
   fs.mkdir(dir, { recursive: true }, err => {
     if (err) {
       reject(`Cannot create directory '${dir}'`);
@@ -110,21 +113,34 @@ if (!directory) {
       }
     })
     .then(() => getFiles())
-    .then(files => Promise.all(files.filter(Boolean).map(([filePath, fileData]) => {
-      return new Promise((resolve, reject) => {
-        const finalPath = `${directory}/${filePath}`;
-        const fileDir = finalPath.split("/").slice(0, -1).join("/");
-        Promise.resolve()
-          .then(() => {
-            if (fileDir.length) {
-              return mkDir(fileDir);
-            }
-          })
+    .then(files => {
+
+      let chain = Promise.resolve();
+      for (const file of files.filter(Boolean)) {
+        const [filePath, fileData] = file;
+        chain = chain.then(() => new Promise((resolve, reject) => {
+          const finalPath = `${directory}/${filePath}`;
+          const fileDir = finalPath.split("/").slice(0, -1).join("/");
+          Promise.resolve()
+            .then(() => {
+              if (fileDir.length) {
+                return exists(fileDir)
+                  .then(e => {
+                    if (!e) {
+                      return mkDir(fileDir);
+                    }
+                  });
+              }
+            })
           .then(() => writeFile(finalPath, fileData))
           .then(resolve)
           .catch(reject);
-      });
-    })))
+        }));
+      }
+
+      return chain;
+
+    })
     .then(() => console.log(`
 Spider Engine minimal project successfully created in '${directory}'.
     `))
