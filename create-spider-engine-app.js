@@ -58,7 +58,7 @@ const getFiles = () => new Promise((resolve, reject) => {
   request(
     {
       method: 'GET',
-      url: "https://spiderengine-io.appspot.com.storage.googleapis.com/minimal.zip",
+      url: "https://storage.googleapis.com/spiderengine-io.appspot.com/minimal.zip",
       encoding: null
     },
     (error, response, body) => {
